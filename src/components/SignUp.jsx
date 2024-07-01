@@ -5,6 +5,7 @@ import { FaEnvelope, FaEye, FaGithub } from "react-icons/fa6";
 import { MdPassword } from "react-icons/md";
 import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
+import { signInWithGoogle } from "../utils/helpers";
 
 function SignUp() {
   const [email, setEmail] = useState("");
@@ -72,7 +73,7 @@ className="text-emerald-400 cursor-pointer">SignUp to Create Account</span></p>
 </div>
 
           {/* or signin with google */}
-<motion.div whileTap={{sclae: 0.9}} 
+<motion.div onClick={signInWithGoogle} whileTap={{sclae: 0.9}} 
 className="flex items-center justify-center gap-3 bg-[rgba(256,256,256,0.2)] backdrop-blur-md w-full py-3 rounded-xl hover:bg-[rgba(256,256,256,0.4)] cursor-pointer">
 <FcGoogle className="text-3xl"/>
 <p className="text-xl text-white">Sign in with Google</p>
