@@ -6,12 +6,13 @@ import { Logo } from "../assets";
 import { MdHome } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import { Projects, SignUp } from "../components";
+import { useSelector } from "react-redux";
 
 function Home() {
   //state to check if the sideMenu is present or not.
   const [isSideMenu, setIsSideMenu] = useState(false);
   // to check if the user is unthenticated to use the home option/component  protected-routing
-  const [user, setUser] = useState(null);
+  const user = useSelector(state => state.user?.user);
 
   return (
     <>

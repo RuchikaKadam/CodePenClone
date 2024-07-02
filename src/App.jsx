@@ -3,10 +3,13 @@ import {Routes, Route, Navigate, useNavigate} from 'react-router-dom';
 import { Home, Spinner } from './components';
 import { auth, db } from './config/firebase.config';
 import { doc, setDoc } from 'firebase/firestore';
+import { useDispatch } from 'react-redux';
+import {SET_USER} from './context/actions/userActions'
 
 const App = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userCred) => {
@@ -14,13 +17,16 @@ const App = () => {
         console.log(userCred?.providerData[0]);
         setDoc(doc(db, "users", userCred?.uid), userCred?.providerData[0]).then(() => {
           //dispatch the action to the redux store
+          dispatch(SET_USER(userCred?.providerData[0]));
+        navigate("/home/projects", {replace: true })
+
         })
       } else {
         navigate("/home/auth", {replace: true })
       }
       setInterval(() => {
         setIsLoading(false);
-      }, 2000)
+      }, 1000)
     })
   
     //clean up the listenerEvent to avoid constant-re-rendering of this code
