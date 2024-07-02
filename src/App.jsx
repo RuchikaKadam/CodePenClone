@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Routes, Route, Navigate, useNavigate} from 'react-router-dom';
-import { Home, Spinner } from './components';
+import { Home, NewProject, Spinner } from './components';
 import { auth, db } from './config/firebase.config';
 import { doc, setDoc } from 'firebase/firestore';
 import { useDispatch } from 'react-redux';
@@ -43,6 +43,7 @@ const App = () => {
     <div className='w-screen h-screen flex items-start justify-start overflow-hidden'>
         <Routes>
             <Route path="/home/*" element={<Home />} />
+            <Route path="/newProject" element={<NewProject />} />
 
             {/* re-route the user completely on the refresh if the route is not matching.
 use Navigate from react-router-dom to re-direct the user. 
