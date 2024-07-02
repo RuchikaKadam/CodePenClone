@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Routes, Route, Navigate, useNavigate} from 'react-router-dom';
-import { Home } from './components';
+import { Home, Spinner } from './components';
 import { auth, db } from './config/firebase.config';
 import { doc, setDoc } from 'firebase/firestore';
 
@@ -18,6 +18,9 @@ const App = () => {
       } else {
         navigate("/home/auth", {replace: true })
       }
+      setInterval(() => {
+        setIsLoading(false);
+      }, 2000)
     })
   
     //clean up the listenerEvent to avoid constant-re-rendering of this code
@@ -28,7 +31,7 @@ const App = () => {
     <>
     {isLoading ? (
       <div className='w-screen h-screen flex items-center justify-center overflow-hidden' >
- 
+          <Spinner/>
     </div>
     ) : (
     <div className='w-screen h-screen flex items-start justify-start overflow-hidden'>
