@@ -10,7 +10,7 @@ const App = () => {
       if(userCred){
         console.log(userCred?.providerData[0].email);
       } else {
-        navigate("/home/auth", {replace: true})
+        navigate("/home/auth", {replace: true })
       }
     })
   
