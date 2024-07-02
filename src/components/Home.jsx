@@ -5,7 +5,7 @@ import { Link, Routes, Route } from "react-router-dom";
 import { Logo } from "../assets";
 import { MdHome } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
-import { Projects, SignUp } from "../components";
+import { Projects, SignUp, UserProfileDetails } from "../components";
 import { useSelector } from "react-redux";
 
 function Home() {
@@ -91,7 +91,9 @@ function Home() {
               </Link>
             </motion.div>
           )}
-          {user && <div></div>}
+
+          {user && <UserProfileDetails />}
+
         </div>
 
         {/* bottom section: where we show Auth  */}
