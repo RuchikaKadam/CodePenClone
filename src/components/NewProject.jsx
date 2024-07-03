@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaChevronDown, FaCss3, FaHtml5, FaJs } from "react-icons/fa6";
 import { FcSettings } from "react-icons/fc";
 import SplitPane from "react-split-pane";
 
+import CodeMirror from '@uiw/react-codemirror';
+import {javascript} from '@codemirror/lang-javascript';
+
 function NewProject() {
+  const [html, setHtml] = useState("");
+  const [css, setCss] = useState("");
+  const [js, setJs] = useState("");
+  const [output, setOutput] = useState("");
+
   return (
     <div>
       <div className="w-screen h-screen flex flex-col items-start justify-start overflow-hidden">
@@ -34,7 +42,15 @@ function NewProject() {
     <FaChevronDown className="text-xl text-primaryText"/>
 </div>
                 </div>
-                <div>Code Mirror</div>
+                <div className="w-full px-2">
+                  <CodeMirror
+                  value={html}
+                  height="600px"
+                  theme={"dark"}
+                  extensions={[javascript({jsx:true})]}
+                  onChange={(value, viewUpdate) => {setHtml(value)}}
+                  />
+                </div>
               </div>
               <SplitPane split="vertical" minSize={500}>
                 {/* css */}
@@ -50,7 +66,15 @@ function NewProject() {
     <FaChevronDown className="text-xl text-primaryText"/>
 </div>
                 </div>
-                <div>Code Mirror</div>
+                <div className="w-full px-2">
+                  <CodeMirror
+                  value={css}
+                  height="600px"
+                  theme={"dark"}
+                  extensions={[javascript({jsx:true})]}
+                  onChange={(value, viewUpdate) => {setCss(value)}}
+                  />
+                </div>
               </div>
                 {/* js */}
                 <div className="w-full h-full flex flex-col items-start justify-start">
@@ -65,7 +89,15 @@ function NewProject() {
     <FaChevronDown className="text-xl text-primaryText"/>
 </div>
                 </div>
-                <div>Code Mirror</div>
+                <div className="w-full px-2">
+                  <CodeMirror
+                  value={js}
+                  height="600px"
+                  theme={"dark"}
+                  extensions={[javascript({jsx:true})]}
+                  onChange={(value, viewUpdate) => {setJs(value)}}
+                  />
+                </div>
               </div>
               </SplitPane>
             </SplitPane>
