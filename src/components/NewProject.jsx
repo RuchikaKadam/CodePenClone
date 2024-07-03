@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronDown, FaCss3, FaHtml5, FaJs } from "react-icons/fa6";
 import { FcSettings } from "react-icons/fc";
 import SplitPane from "react-split-pane";
@@ -11,6 +11,25 @@ function NewProject() {
   const [css, setCss] = useState("");
   const [js, setJs] = useState("");
   const [output, setOutput] = useState("");
+
+  useEffect(() => {
+    updateOutput();
+  }, [html, css, js])
+
+  const updateOutput = () => {
+    const combinedOutput = `
+      <html>
+        <head>
+          <style>${css}</style>
+        </head>
+        <body>
+          ${html}
+          <script>${js}</script>
+        </body>
+      </html>
+    `;
+    setOutput(combinedOutput);
+  }
 
   return (
     <div>
@@ -102,7 +121,15 @@ function NewProject() {
               </SplitPane>
             </SplitPane>
             {/* bottom */}
-            <div> </div>
+            <div className="bg-white"
+            style={{overflow:"hidden", height:"100%"}}
+            >
+            <iframe
+              title="Result"
+              srcDoc={output}
+              style={{border:"none", width:"100%", height:"100%"}}
+            />  
+            </div>
           </SplitPane>
         </div>
       </div>
