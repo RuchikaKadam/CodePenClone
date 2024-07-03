@@ -5,12 +5,24 @@ import SplitPane from "react-split-pane";
 
 import CodeMirror from '@uiw/react-codemirror';
 import {javascript} from '@codemirror/lang-javascript';
+import { Link } from "react-router-dom";
+import {Logo} from '../assets'
+import { motion, AnimatePresence } from "framer-motion";
+import { MdCheck, MdEdit } from "react-icons/md";
+import { useSelector } from "react-redux";
+import {UserProfileDetails, Alert} from "../components";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../config/firebase.config";
 
 function NewProject() {
   const [html, setHtml] = useState("");
   const [css, setCss] = useState("");
   const [js, setJs] = useState("");
   const [output, setOutput] = useState("");
+  const [isTitle, setIsTitle] = useState(false);
+  const [title, setTitle] = useState("Untitled");
+  const user = useSelector((state) => state.user.user);
+  const [alert, setAlert] = useState(false);
 
   useEffect(() => {
     updateOutput();
@@ -31,11 +43,90 @@ function NewProject() {
     setOutput(combinedOutput);
   }
 
+  const saveProgramme = async() => {
+  const id = `${Date.now()}`
+  const _doc = {
+    id: id,
+    title: title,
+    html: html,
+    css: css,
+    js: js,
+    output : output,
+    user : user,
+  }
+  await setDoc(doc(db, "Projects", id), _doc)
+  .then((res) => {
+    setAlert(true)
+  })
+  .catch((err) => console.log(err));
+
+  setInterval(() => {
+    setAlert(false);
+  }, 2000);
+ };
+
   return (
     <div>
       <div className="w-screen h-screen flex flex-col items-start justify-start overflow-hidden">
         {/* alert section */}
+        <AnimatePresence>
+          {alert && <Alert status={"Success"} alertMsg={"Project saved successfully!"} />}
+        </AnimatePresence>
+
         {/* heading section */}
+        <header className="w-full flex items-center justify-between px-12 py-4">
+          <div className="flex items-center justify-center gap-6">
+             <Link to={"/home/projects"}>
+             <img src={Logo} alt="logo" className="w-32 h-auto object-contain" />
+             </Link>
+             <div className="flex flex-col items-start justify-start">
+              {/* title */}
+              <div className="flex items-center justify-center gap-3 ">
+                <AnimatePresence>
+                   {isTitle ? ( 
+                    <>
+                    <motion.input className="px-3 py-2 rounded-md bg-transparent text-primaryText text-base outline-none border-none" 
+                    key={"TitleInput"} type="text" placeholder="enter title" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                   </> ) : ( <>
+                      <motion.p className="px-3 py-2 text-white text-lg" key={"titleLabel"}>{title}</motion.p>
+                   </> )}
+                </AnimatePresence>
+
+                <AnimatePresence>
+                   {isTitle ? ( 
+                    <>
+                    <motion.div key={"MdCheck"} whileTap={{scale:0.9}} className="cursor-pointer" onClick={() => setIsTitle(false)}>
+                      <MdCheck className="text-2xl text-emerald-500"/>
+                    </motion.div>
+                    </> ) : ( <>
+                      <motion.div key={"MdEdit"} whileTap={{scale:0.9}} className="cursor-pointer" onClick={() => setIsTitle(true)}>
+                        <MdEdit className="text-2xl text-primaryText"/>
+                      </motion.div>
+                      </> )}
+                </AnimatePresence>
+              </div>
+              {/* follow */}
+              <div className="flex items-center justify-center px-3 -mt-2 gap-2">
+                    <p className="text-sm text-primaryText">{
+                      user?.displayName ? user?.displayName : `${user?.email.split("@")[0]}`
+                      }</p>
+                    <motion.p whileTap={{scale: 0.9}} className="bg-emerald-500 rounded-sm px-2 py-[1px] text-[10px] text-primary font-semibold cursor-pointer">+ Follow</motion.p>
+             </div>
+          </div>
+          </div>
+
+          {/* user-section */}
+          {user &&  (
+            <div className="flex items-center justify-center gap-4">
+            <motion.button whileTap={{scale: 0.9}} className="px-6 py-4 bg-primaryText cursor-pointer text-primary text-base font-semibold rounded-md"
+            onClick={saveProgramme}
+            >Save</motion.button>
+            {/* userDetails */}
+             <UserProfileDetails/>
+          </div>
+          )}
+          
+        </header>
 
         {/* react split/ coding section */}
         <div>
