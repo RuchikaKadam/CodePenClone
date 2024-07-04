@@ -15,7 +15,7 @@ const App = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userCred) => {
       if(userCred){
-        console.log(userCred?.providerData[0]);
+        // console.log(userCred?.providerData[0]);
         setDoc(doc(db, "users", userCred?.uid), userCred?.providerData[0]).then(() => {
           //dispatch the action to the redux store
           dispatch(SET_USER(userCred?.providerData[0]));
